@@ -49,17 +49,20 @@ async function getFoursquare(business) {
 		method: 'GET',
 		headers: {
 		Accept: 'application/json',
-		Authorization: 'fsq3ATzZbmcGhdeFafr73wZcnJ+LlN6bK+4dh19a7ClS4u8='
+		Authorization: 'fsq3spWSG8m80FIF3qRsrZjzR7+rZ93xUObI78mx9H81QdY='
 		}
 	}
 	let limit = 5
 	let lat = myMap.coordinates[0]
 	let lon = myMap.coordinates[1]
-	let response = await fetch(`https://cors-anywhere.herokuapp.com/https://api.foursquare.com/v3/places/search?&query=${business}&limit=${limit}&ll=${lat}%2C${lon}`, options)
-	let data = await response.text()
-	let parsedData = JSON.parse(data)
-	let businesses = parsedData.results
+	
+	let response = await fetch(`https://api.foursquare.com/v3/places/search?&query=${business}&limit=${limit}&ll=${lat}%2C${lon}`, options)
+	console.log(response)
+	let data = await response.json()
+	let businesses = data.results
 	return businesses
+	
+	
 }
 // process foursquare array
 function processBusinesses(data) {
@@ -78,6 +81,9 @@ function processBusinesses(data) {
 // event handlers
 // window load
 window.onload = async () => {
+	let userCoords = await getCoords()
+	myMap.coordinates = userCoords
+	myMap.buildMap()
 	
 // business submit button
 document.getElementById('submit').addEventListener('click', async (event) => {
@@ -86,5 +92,6 @@ document.getElementById('submit').addEventListener('click', async (event) => {
 	let data = await getFoursquare(business)
 	myMap.businesses = processBusinesses(data)
 	myMap.addMarkers()
+	getFoursquareBusinesses(secectedBusiness)
 })
 }
