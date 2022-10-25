@@ -20,7 +20,7 @@ const myMap = {
 		const marker = L.marker(this.coordinates)
 		marker
 		.addTo(this.map)
-		.bindPopup('<p1><b>You are here</b><br></p1>')
+		.bindPopup('<b>You are here</b><br>')
 		.openPopup()
 	},
 	// add business markers
@@ -86,3 +86,5 @@ document.getElementById('submit').addEventListener('click', async (event) => {
 	let data = await getFoursquare(business)
 	myMap.businesses = processBusinesses(data)
 	myMap.addMarkers()
+})
+}
